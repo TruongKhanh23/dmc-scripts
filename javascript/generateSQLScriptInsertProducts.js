@@ -1,0 +1,309 @@
+// Generate SQL script insert products
+
+function generateSQL(data) {
+  const productCategories = data.categories;
+  const volumes = data.volumes;
+  const products = data.products;
+  const variants = data.variants;
+  const prices = data.prices;
+  const branches = data.branches;
+  const salesChannels = data.salesChannels;
+
+  let sql = "";
+
+  // Generate SQL for categories
+  sql += `-- Kiểm tra và tạo danh mục sản phẩm\nWITH category_cte AS (\n`;
+  sql += `    SELECT id, name\n    FROM public.product_categories\n    WHERE name IN (${productCategories
+    .map((cat) => `'${cat}'`)
+    .join(", ")})\n)\n`;
+  sql += `-- Chèn danh mục sản phẩm\nINSERT INTO public.product_categories(id, created_by, updated_by, created_at, updated_at, deleted, name, description)\n`;
+
+  productCategories.forEach((cat) => {
+    sql += `SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE, '${cat}', '${cat} các loại'\n`;
+    sql += `WHERE NOT EXISTS (SELECT 1 FROM category_cte WHERE name = '${cat}')\nUNION ALL\n`;
+  });
+  sql = sql.replace(/UNION ALL\n?$/, ";");
+
+  // Generate SQL for volumes
+  sql += `\n\n-- Kiểm tra và tạo các volume\nWITH volume_cte AS (\n`;
+  sql += `    SELECT id, name FROM public.product_volumes WHERE name IN (${volumes
+    .map((vol) => `'${vol}'`)
+    .join(", ")})\n)\n`;
+  sql += `-- Chèn volume\nINSERT INTO public.product_volumes(id, created_by, updated_by, created_at, updated_at, deleted, name)\n`;
+
+  volumes.forEach((vol) => {
+    sql += `SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE, '${vol}'\n`;
+    sql += `WHERE NOT EXISTS (SELECT 1 FROM volume_cte WHERE name = '${vol}')\nUNION ALL\n`;
+  });
+  sql = sql.replace(/UNION ALL\n?$/, ";");
+
+  // Generate SQL for products
+  sql += `\n\n-- Kiểm tra và tạo các sản phẩm\nWITH product_cte AS (\n`;
+  sql += `    SELECT id, name FROM public.products WHERE name IN (${products
+    .map((prod) => `'${prod.name}'`)
+    .join(", ")})\n)\n`;
+  sql += `-- Chèn sản phẩm\nINSERT INTO public.products(id, created_by, updated_by, created_at, updated_at, deleted, category_id, name, description)\n`;
+
+  products.forEach((prod) => {
+    sql += `SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE, (SELECT id FROM public.product_categories WHERE name = '${prod.category}'), '${prod.name}', '${prod.description}'\n`;
+    sql += `WHERE NOT EXISTS (SELECT 1 FROM product_cte WHERE name = '${prod.name}')\nUNION ALL\n`;
+  });
+  sql = sql.replace(/UNION ALL\n?$/, ";");
+
+  // Generate SQL for variants
+  sql += `\n\n-- Kiểm tra và tạo các variants cho sản phẩm\nWITH variant_cte AS (\n`;
+  sql += `    SELECT id, name FROM public.product_variants WHERE name IN (${variants
+    .map((variant) => {
+      const prodName = variant.product;
+      const volumeLabel = variant.volume + "ml";
+      const variantName = `${prodName} ${volumeLabel}`;
+      return `'${variantName}'`;
+    })
+    .join(", ")})\n)\n`;
+  sql += `-- Chèn variant cho các sản phẩm\nINSERT INTO public.product_variants(id, created_by, updated_by, created_at, updated_at, deleted, product_id, volume_id, name)\n`;
+
+  variants.forEach((variant) => {
+    const prodName = variant.product;
+    const volumeLabel = variant.volume + "ml";
+    const variantName = `${prodName} ${volumeLabel}`;
+    sql += `SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE, (SELECT id FROM public.products WHERE name = '${prodName}'), (SELECT id FROM public.product_volumes WHERE name = '${variant.volume}'), '${variantName}'\n`;
+    sql += `WHERE NOT EXISTS (SELECT 1 FROM variant_cte WHERE name = '${variantName}')\nUNION ALL\n`;
+  });
+  sql = sql.replace(/UNION ALL\n?$/, ";");
+
+  // Generate SQL for prices
+  sql += `\n\n-- Kiểm tra và tạo giá cho sản phẩm\nWITH price_cte AS (\n`;
+  sql += `    SELECT variant_id, branch_id, sales_channel_id\n`;
+  sql += `    FROM public.product_prices\n)\n`;
+
+  sql += `-- Chèn giá cho sản phẩm\nINSERT INTO public.product_prices(id, created_by, updated_by, created_at, updated_at, deleted, variant_id, branch_id, sales_channel_id, price)\n`;
+
+  prices.forEach((price) => {
+    const variant = variants.find(
+      (v) => v.product === price.product && v.name === price.variant
+    );
+    const volumeLabel = variant?.volume + "ml";
+    const variantFullName = `${price.product} ${volumeLabel}`;
+
+    sql += `SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE,\n`;
+    sql += `  (SELECT id FROM public.product_variants WHERE name = '${variantFullName}' AND product_id = (SELECT id FROM public.products WHERE name = '${price.product}')),\n`;
+    sql += `  (SELECT id FROM public.branches WHERE name = '${price.branch}'),\n`;
+    sql += `  (SELECT id FROM public.sales_channels WHERE name = '${price.salesChannel}'),\n`;
+    sql += `  ${price.amount}\n`;
+
+    sql += `WHERE NOT EXISTS (\n`;
+    sql += `  SELECT 1 FROM price_cte WHERE\n`;
+    sql += `    variant_id = (SELECT id FROM public.product_variants WHERE name = '${variantFullName}' AND product_id = (SELECT id FROM public.products WHERE name = '${price.product}'))\n`;
+    sql += `    AND branch_id = (SELECT id FROM public.branches WHERE name = '${price.branch}')\n`;
+    sql += `    AND sales_channel_id = (SELECT id FROM public.sales_channels WHERE name = '${price.salesChannel}')\n`;
+    sql += `)\nUNION ALL\n`;
+  });
+
+  sql = sql.replace(/UNION ALL\n?$/, ";");
+
+  return sql;
+}
+
+// Generate product data
+
+function generatePriceByVolume(volume, productName) {
+  if (productName === "Cà phê chai") {
+    return 60000; // Xử lý riêng cho "Cà phê chai"
+  }
+
+  switch (volume) {
+    case "330":
+      return 20000;
+    case "500":
+    case "600":
+      return 25000;
+    case "20":
+      return 5000;
+    default:
+      return 0;
+  }
+}
+
+function generateVariantsForProduct(product) {
+  const variants = [];
+
+  // Điều chỉnh volume theo category
+  let volumes = [];
+  if (product.category === "Cà phê" && product.name !== "Cà phê chai") {
+    volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
+  } else if (
+    product.category === "Trà" ||
+    product.category === "Sữa chua" ||
+    product.name === "Cà phê chai"
+  ) {
+    volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
+  } else if (
+    product.name === "Kem mặn thêm (Salted cream)" ||
+    product.name === "Cà phê thêm (Extra coffee)"
+  ) {
+    volumes = ["20"]; // Kem mặn thêm và Cà phê thêm chỉ có volume 20
+  }
+
+  // Tạo các variants cho mỗi volume
+  volumes.forEach((volume) => {
+    const variant = {
+      product: product.name,
+      volume: volume,
+      name: volume === "330" ? "Nhỏ" : "Lớn",
+    };
+    variants.push(variant);
+  });
+
+  return variants;
+}
+
+function generatePricesForProduct(product) {
+  const prices = [];
+
+  // Điều chỉnh volume theo category
+  let volumes = [];
+  if (product.name === "Cà phê chai") {
+    volumes = ["500"]; // Cà phê chai chỉ có thể tích 500
+  } else if (product.category === "Cà phê" && product.name !== "Cà phê chai") {
+    volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
+  } else if (product.category === "Trà" || product.category === "Sữa chua") {
+    volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
+  } else if (
+    product.name === "Kem mặn thêm (Salted cream)" ||
+    product.name === "Cà phê thêm (Extra coffee)"
+  ) {
+    volumes = ["20"]; // Kem mặn thêm và Cà phê thêm chỉ có volume 20
+  }
+
+  // Tạo các giá cho mỗi variant
+  volumes.forEach((volume) => {
+    const price = {
+      product: product.name,
+      variant: volume === "330" ? "Nhỏ" : "Lớn",
+      amount: generatePriceByVolume(volume, product.name), // Truyền tên sản phẩm vào
+      branch: "Nguyễn Huệ",
+      salesChannel: "Tại quán",
+    };
+    prices.push(price);
+  });
+
+  return prices;
+}
+
+function generateData(products) {
+  let variants = [];
+  let prices = [];
+  let categories = [];
+
+  products.forEach((product) => {
+    // Tạo các variant và giá cho mỗi sản phẩm
+    variants = variants.concat(generateVariantsForProduct(product));
+    prices = prices.concat(generatePricesForProduct(product));
+
+    // Thêm category nếu chưa có
+    if (!categories.includes(product.category)) {
+      categories.push(product.category);
+    }
+  });
+
+  // Tạo cấu trúc data theo yêu cầu
+  const data = {
+    categories: categories,
+    volumes: ["500", "330", "600", "20"],
+    products: products.map((product) => ({
+      name: product.name,
+      category: product.category,
+      description: product.description,
+    })),
+    variants: variants,
+    prices: prices,
+    branches: ["Nguyễn Huệ"],
+    salesChannels: ["Tại quán"],
+  };
+
+  return data;
+}
+
+// Dữ liệu sản phẩm cơ bản với category và description
+const products = [
+  { name: "Trà me", category: "Trà", description: "Trà me (Tamarind tea)" },
+  { name: "Trà tắc xi muối", category: "Trà", description: "Trà tắc xi muối" },
+  {
+    name: "Chanh dây",
+    category: "Trà",
+    description: "Chanh dây (Passion juice)",
+  },
+  {
+    name: "Ca cao sữa",
+    category: "Trà",
+    description: "Ca cao sữa (Milk cocoa)",
+  },
+  {
+    name: "Cà phê muối",
+    category: "Cà phê",
+    description: "Cà phê muối (Salted coffee)",
+  },
+  {
+    name: "Cà phê dừa",
+    category: "Cà phê",
+    description: "Cà phê dừa (Coconut coffee)",
+  },
+  {
+    name: "Cà phê chai",
+    category: "Cà phê",
+    description: "Cà phê chai (Coffee bottle)",
+  },
+  {
+    name: "Cà phê đen",
+    category: "Cà phê",
+    description: "Cà phê đen (Black coffee)",
+  },
+  {
+    name: "Cà phê sữa",
+    category: "Cà phê",
+    description: "Cà phê sữa (Milk coffee)",
+  },
+  {
+    name: "Bạc sỉu",
+    category: "Cà phê",
+    description: "Bạc sỉu (White coffee)",
+  },
+  {
+    name: "Cà phê bắp",
+    category: "Cà phê",
+    description: "Cà phê bắp (Corn coffee)",
+  },
+  {
+    name: "Sữa tươi cà phê",
+    category: "Cà phê",
+    description: "Sữa tươi cà phê (Fresh milk coffee)",
+  },
+  {
+    name: "Cà phê kem phô mai",
+    category: "Cà phê",
+    description: "Cà phê kem phô mai",
+  },
+  { name: "Sữa chua đá", category: "Sữa chua", description: "Sữa chua đá" },
+  {
+    name: "Sữa chua chanh dây",
+    category: "Sữa chua",
+    description: "Sữa chua chanh dây (Passion fruit yogurt)",
+  },
+  {
+    name: "Kem mặn thêm",
+    category: "Cà phê",
+    description: "Kem mặn thêm (Salted cream)",
+  },
+  {
+    name: "Cà phê thêm",
+    category: "Cà phê",
+    description: "Cà phê thêm (Extra coffee)",
+  },
+];
+
+// Gọi hàm để tạo cấu trúc data
+const data = generateData(products);
+
+// Gọi hàm để generate SQL
+const sql = generateSQL(data);
+console.log(sql);
