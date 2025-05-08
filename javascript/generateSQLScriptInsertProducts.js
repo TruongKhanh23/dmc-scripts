@@ -1,3 +1,5 @@
+const branch = "Nguyễn Huệ";
+const salesChannel = "Tại quán"
 // Generate SQL script insert products
 
 function generateSQL(data) {
@@ -181,8 +183,8 @@ function generatePricesForProduct(product) {
       product: product.name,
       variant: volume === "330" ? "Nhỏ" : "Lớn",
       amount: generatePriceByVolume(volume, product.name), // Truyền tên sản phẩm vào
-      branch: "Nguyễn Huệ",
-      salesChannel: "Tại quán",
+      branch,
+      salesChannel,
     };
     prices.push(price);
   });
@@ -217,8 +219,8 @@ function generateData(products) {
     })),
     variants: variants,
     prices: prices,
-    branches: ["Nguyễn Huệ"],
-    salesChannels: ["Tại quán"],
+    branches: [branch],
+    salesChannels: [salesChannel],
   };
 
   return data;
