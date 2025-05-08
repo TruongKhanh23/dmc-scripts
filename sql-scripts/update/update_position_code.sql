@@ -7,22 +7,22 @@ SELECT
     created_at,  -- Giữ nguyên thời gian tạo cũ
     updated_at,  -- Giữ nguyên thời gian cập nhật cũ
     deleted,     -- Giữ nguyên trạng thái xóa
-    'branch_manager' AS code,  -- Sử dụng code mới
+    'accountant_head' AS code,  -- Sử dụng code mới
     name,  -- Giữ nguyên tên vị trí cũ
     description  -- Giữ nguyên mô tả cũ
 FROM public.positions
-WHERE code = 'branchManager'
+WHERE code = 'accountantHead'
 ON CONFLICT DO NOTHING;
 
 -- 2. Cập nhật bảng phụ sang code mới
 UPDATE public.position_accesses
-SET position_code = 'branch_manager'
-WHERE position_code = 'branchManager';
+SET position_code = 'accountant_head'
+WHERE position_code = 'accountantHead';
 
 UPDATE public.roles
-SET position_code = 'branch_manager'
-WHERE position_code = 'branchManager';
+SET position_code = 'accountant_head'
+WHERE position_code = 'accountantHead';
 
 -- 3. Sau cùng mới xóa dòng cũ trong positions
 DELETE FROM public.positions
-WHERE code = 'branchManager';
+WHERE code = 'accountantHead';
