@@ -1,5 +1,23 @@
 const branch = "Nguyễn Huệ";
 const salesChannel = "Tại quán"
+
+const volumePricesByBranch = {
+  "Nguyễn Huệ": {
+    "330": 20000,
+    "500": 25000,
+    "600": 25000,
+    "20": 5000,
+  },
+  "": {
+    "330": 18000,
+    "500": 20000,
+    "600": 25000,
+    "20": 5000,
+  },
+  // Thêm chi nhánh khác ở đây nếu cần
+};
+
+
 // Generate SQL script insert products
 
 function generateSQL(data) {
@@ -110,20 +128,11 @@ function generateSQL(data) {
 
 function generatePriceByVolume(volume, productName) {
   if (productName === "Cà phê chai") {
-    return 60000; // Xử lý riêng cho "Cà phê chai"
+    return 60000;
   }
 
-  switch (volume) {
-    case "330":
-      return 20000;
-    case "500":
-    case "600":
-      return 25000;
-    case "20":
-      return 5000;
-    default:
-      return 0;
-  }
+  const branchPrices = volumePricesByBranch[branch] || volumePricesByBranch[""];
+  return branchPrices[volume] ?? 0;
 }
 
 function generateVariantsForProduct(product) {
