@@ -1,10 +1,10 @@
 DO $$
 BEGIN
-    -- Kiểm tra xem kênh 'Quán' đã tồn tại chưa
-    IF NOT EXISTS (SELECT 1 FROM public.sales_channels WHERE name = 'Quán') THEN
+    -- Kiểm tra xem kênh 'Tại quán' đã tồn tại chưa
+    IF NOT EXISTS (SELECT 1 FROM public.sales_channels WHERE name = 'Tại quán') THEN
         INSERT INTO public.sales_channels(
             id, created_by, updated_by, created_at, updated_at, deleted, name, description
-        ) VALUES (substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE, 'Quán', 'Kênh bán hàng tại quán');
+        ) VALUES (substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE, 'Tại quán', 'Kênh bán hàng tại quán');
     END IF;
 
     -- Kiểm tra xem kênh 'Grab' đã tồn tại chưa
