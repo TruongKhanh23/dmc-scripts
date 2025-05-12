@@ -1,8 +1,8 @@
-const branch = "Nguyễn Huệ";
+const branch = "Số 68 Nguyễn Huệ - Q.1";
 const salesChannel = "Tại quán";
 
 const volumePricesByBranch = {
-  "Nguyễn Huệ": {
+  "Số 68 Nguyễn Huệ - Q.1": {
     330: 20000,
     500: 25000,
     600: 25000,

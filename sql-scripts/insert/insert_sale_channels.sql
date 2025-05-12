@@ -43,3 +43,6 @@ BEGIN
     END IF;
 
 END $$;
+
+SELECT * FROM public.sales_channels
+ORDER BY id ASC LIMIT 100
