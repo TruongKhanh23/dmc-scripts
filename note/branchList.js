@@ -1,4 +1,4 @@
-const branhces = [
+const branches = [
   {
     name: "Đại lộ Đồng Khởi - Bến Tre",
     address: "13C đại lộ Đồng Khởi, khu phố 6, phường Phú Khương, TP. Bến Tre",
