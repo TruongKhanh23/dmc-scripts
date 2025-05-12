@@ -21,7 +21,9 @@ giá trị của 1 số cột sẽ như sau:
 
 Thỏa yêu cầu sau
 1. Trước khi insert phải kiểm tra: code hoặc name của record đã tồn tại chưa, nếu chưa thì không insert
-2. List branches select từ bảng public.branches chứ không phải data input của hàm javascript nhé
+2. List branches select từ bảng public.branches và loop theo đó, chứ không phải data input của hàm javascript nhé 
+3. Khi tôi run function javascript ra kết quả tôi sẽ copy và paste vào sql editor và run
+
 
 
 export const POSITIONS = {
