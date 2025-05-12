@@ -1,22 +1,21 @@
 const branch = "Nguyễn Huệ";
-const salesChannel = "Tại quán"
+const salesChannel = "Tại quán";
 
 const volumePricesByBranch = {
   "Nguyễn Huệ": {
-    "330": 20000,
-    "500": 25000,
-    "600": 25000,
-    "20": 5000,
+    330: 20000,
+    500: 25000,
+    600: 25000,
+    20: 5000,
   },
   "": {
-    "330": 18000,
-    "500": 20000,
-    "600": 25000,
-    "20": 5000,
+    330: 18000,
+    500: 20000,
+    600: 25000,
+    20: 5000,
   },
   // Thêm chi nhánh khác ở đây nếu cần
 };
-
 
 // Generate SQL script insert products
 

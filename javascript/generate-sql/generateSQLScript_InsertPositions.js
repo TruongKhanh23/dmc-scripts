@@ -1,25 +1,25 @@
 export const POSITIONS = {
-  ADMINISTRATOR: 'administrator',
-  ACCOUNTANT_HEAD: 'accountant_head',
-  ACCOUNTANT: 'accountant',
-  CHAIN_MANAGER: 'chain_manager',
-  BRANCH_MANAGER: 'branch_manager',
-  CASHIER: 'cashier',
+  ADMINISTRATOR: "administrator",
+  ACCOUNTANT_HEAD: "accountant_head",
+  ACCOUNTANT: "accountant",
+  CHAIN_MANAGER: "chain_manager",
+  BRANCH_MANAGER: "branch_manager",
+  CASHIER: "cashier",
 };
 
 const positionNameVI = {
-  administrator: 'Quản trị hệ thống',
-  accountant_head: 'Trưởng phòng kế toán',
-  accountant: 'Kế toán viên',
-  chain_manager: 'Quản lý chuỗi',
-  branch_manager: 'Cửa hàng trưởng',
-  cashier: 'Thu ngân',
+  administrator: "Quản trị hệ thống",
+  accountant_head: "Trưởng phòng kế toán",
+  accountant: "Kế toán viên",
+  chain_manager: "Quản lý chuỗi",
+  branch_manager: "Cửa hàng trưởng",
+  cashier: "Thu ngân",
 };
 
 function generateInsertPositionsSQL() {
   const now = `now()`; // hoặc dùng `CURRENT_TIMESTAMP`
-  const createdBy = 'admin';
-  const updatedBy = 'admin';
+  const createdBy = "admin";
+  const updatedBy = "admin";
 
   const inserts = Object.values(POSITIONS).map((code) => {
     const nameVI = positionNameVI[code];
@@ -52,7 +52,7 @@ $$;
 `;
   });
 
-  return inserts.join('\n');
+  return inserts.join("\n");
 }
 
 console.log(generateInsertPositionsSQL());
