@@ -963,3 +963,5 @@ BEGIN
   END IF;
 END
 $$;
+
+SELECT * FROM public.branches
