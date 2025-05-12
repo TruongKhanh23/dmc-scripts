@@ -1,0 +1,24 @@
+Dựa vào đây viết javascript function generate ra đoạn insert positions
+
+Thoả các giá trị 1 số cột như sau
+1. id: substr(md5(random()::text), 1, 24)
+2. createdById: admin
+3. updatedById: admin
+4. permission: 7
+
+Thỏa yêu cầu sau:
+1. Phải kiểm tra theo code hoặc name đó đã tồn tại chưa, nếu chưa thì mới insert, nếu rồi thì không insert
+2. name phải dịch thành tiếng Việt nha 
+
+export const POSITIONS = {
+  ADMINISTRATOR: 'administrator',
+  ACCOUNTANT_HEAD: 'accountant_head',
+  ACCOUNTANT: 'accountant',
+  CHAIN_MANAGER: 'chain_manager',
+  BRANCH_MANAGER: 'branch_manager',
+  CASHIER: 'cashier',
+};
+
+INSERT INTO public.positions(
+	id, created_by, updated_by, created_at, updated_at, deleted, name, code, description)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
