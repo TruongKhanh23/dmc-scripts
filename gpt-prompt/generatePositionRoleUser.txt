@@ -1,0 +1,94 @@
+Dựa vào đây viết function javascript generate sql script để insert
+1. insert positions, 
+2. sau đó với mỗi position tạo role theo positionCode, với roleName sẽ là lấy từ positon name + branchName, 
+3. mỗi branch sẽ có 1 role tương ứng (branch sẽ là select từ public.branches), 
+4. mỗi role sẽ có 1 user để đăng nhập: với username là rolename viết liền dưới dạng lowercase, và password mặc định là "adminadmin"
+5. Chỉ có administrator mới có toàn quyền các feature_code
+6. accountant_head, chain_manager, branch_manager đều có quyền feature_code: users, shift_reports
+7. cashier chỉ có quyền feature_code: shift_reports
+
+Kết quả mong đợi sẽ có 
+1. 6 records positions trong bảng positions
+2. giả sử select ra branch có name là "Nguyễn huệ - Quận 1" thì role name sẽ là "Cửa hàng trưởng Nguyễn Huệ - Quận 1"
+3. role "Cửa hàng trưởng Nguyễn Huệ - Quận 1" sẽ có user đăng nhập với username là "cuahangtruongnguyenhuequan1" với password là "adminadmin"
+
+
+giá trị của 1 số cột sẽ như sau:
+1. id: substr(md5(random()::text), 1, 24) - 4. Không sử dụng import cryto nhé, điền trực tiếp vào khi insert id
+2. createdById: admin
+3. updatedById: admin
+4. permission: 7
+
+Thỏa yêu cầu sau
+1. Trước khi insert phải kiểm tra: code hoặc name của record đã tồn tại chưa, nếu chưa thì không insert
+2. List branches select từ bảng public.branches chứ không phải data input của hàm javascript nhé
+
+
+export const POSITIONS = {
+  ADMINISTRATOR: 'administrator',
+  ACCOUNTANT_HEAD: 'accountant_head',
+  ACCOUNTANT: 'accountant',
+  CHAIN_MANAGER: 'chain_manager',
+  BRANCH_MANAGER: 'branch_manager',
+  CASHIER: 'cashier',
+};
+
+export const features = [
+  {
+    code: 'branches',
+    name: 'Chi nhánh',
+  },
+  {
+    code: 'positions',
+    name: 'Chức vụ',
+  },
+  {
+    code: 'roles',
+    name: 'Vai trò',
+  },
+  {
+    code: 'units',
+    name: 'Đơn vị tính',
+  },
+  {
+    code: 'users',
+    name: 'Người dùng',
+  },
+  {
+    code: 'products',
+    name: 'Sản phẩm',
+  },
+  {
+    code: 'shift_reports',
+    name: 'Báo cáo ca',
+  },
+  {
+    code: 'sales_channels',
+    name: 'Kênh bán hàng',
+  },
+];
+
+
+INSERT INTO public.positions(
+	id, created_by, updated_by, created_at, updated_at, deleted, name, code, description)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO public.position_accesses(
+created_by, updated_by, created_at, updated_at, deleted, position_code, feature_code, permission)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO public.roles(
+	id, created_by, updated_by, created_at, updated_at, deleted, name, description, position_code)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO public.role_branches(
+	created_by, updated_by, created_at, updated_at, deleted, role_id, branch_id)
+	VALUES (?, ?, ?, ?, ?, ?, ?);
+    
+INSERT INTO public.users(
+	id, created_by, updated_by, created_at, updated_at, deleted, full_name, username, password, role_id, status, last_login_at, refresh_token)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+    INSERT INTO public.role_branches(
+	created_by, updated_by, created_at, updated_at, deleted, role_id, branch_id)
+	VALUES (?, ?, ?, ?, ?, ?, ?);
