@@ -45,20 +45,28 @@ const branches = [
 
 branches.forEach(branch => {
   const address = branch.address;
-  
-  // Tách tên đường
-  const street = address.split(',')[0];
-  
-  // Tách quận
-  const districtMatch = address.match(/(Quận|Q\.)\s?(\w+)/);
-  const district = districtMatch ? districtMatch[2] : '';
 
-  // Tách thành phố
-  const cityMatch = address.match(/(Thành phố|TP\.?)\s?([A-Za-z\s]+)/);
-  const city = cityMatch && cityMatch[2] !== 'Hồ Chí Minh' ? cityMatch[2] : '';
+  // Tách tên đường
+  let street = address.split(',')[0].trim();
+
+  // Tách quận (sau "Q." hoặc "Quận", đến trước dấu phẩy)
+  const districtMatch = address.match(/(?:Quận|Q\.)\s*([^,]+)/i);
+  let district = districtMatch ? 'Q.' + districtMatch[1].trim() : '';
+
+  // Tách thành phố (sau "TP" hoặc "Thành phố")
+  const cityMatch = address.match(/(?:TP\.?|Thành phố)\s*([^,]+)/i);
+  let city = cityMatch && cityMatch[1].trim() !== 'Hồ Chí Minh' ? cityMatch[1].trim() : '';
+
+  // Nếu bất kỳ phần nào chứa "Cà phê muối chú Long" thì gán phần đó bằng rỗng
+  const target = "Cà phê muối chú Long".toLowerCase();
+  if ([street, district, city].some(part => part.toLowerCase().includes(target))) {
+    if (street.toLowerCase().includes(target)) street = '';
+    if (district.toLowerCase().includes(target)) district = '';
+    if (city.toLowerCase().includes(target)) city = '';
+  }
 
   // Kết hợp lại
-  branch.name = city ? `${street}, ${district}, ${city}` : `${street}, ${district}`;
+  branch.name = [street, district, city].filter(Boolean).join(' - ');
 });
 
 console.log(branches);
