@@ -843,49 +843,49 @@ WHERE NOT EXISTS (
 )
 UNION ALL
 SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE,
-  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
+  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
   (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1'),
   (SELECT id FROM public.sales_channels WHERE name = 'Tại quán'),
   60000
 WHERE NOT EXISTS (
   SELECT 1 FROM price_cte WHERE
-    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
+    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
     AND branch_id = (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1')
     AND sales_channel_id = (SELECT id FROM public.sales_channels WHERE name = 'Tại quán')
 )
 UNION ALL
 SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE,
-  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
+  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
   (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1'),
   (SELECT id FROM public.sales_channels WHERE name = 'Grab'),
   65000
 WHERE NOT EXISTS (
   SELECT 1 FROM price_cte WHERE
-    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
+    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
     AND branch_id = (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1')
     AND sales_channel_id = (SELECT id FROM public.sales_channels WHERE name = 'Grab')
 )
 UNION ALL
 SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE,
-  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
+  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
   (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1'),
   (SELECT id FROM public.sales_channels WHERE name = 'Be'),
   65000
 WHERE NOT EXISTS (
   SELECT 1 FROM price_cte WHERE
-    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
+    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
     AND branch_id = (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1')
     AND sales_channel_id = (SELECT id FROM public.sales_channels WHERE name = 'Be')
 )
 UNION ALL
 SELECT substr(md5(random()::text), 1, 24), 'admin', 'admin', NOW(), NOW(), FALSE,
-  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
+  (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai')),
   (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1'),
   (SELECT id FROM public.sales_channels WHERE name = 'Shopee'),
   65000
 WHERE NOT EXISTS (
   SELECT 1 FROM price_cte WHERE
-    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai undefinedml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
+    variant_id = (SELECT id FROM public.product_variants WHERE name = 'Cà phê muối chai 330ml' AND product_id = (SELECT id FROM public.products WHERE name = 'Cà phê muối chai'))
     AND branch_id = (SELECT id FROM public.branches WHERE name = 'Số 68 Nguyễn Huệ - Q.1')
     AND sales_channel_id = (SELECT id FROM public.sales_channels WHERE name = 'Shopee')
 )

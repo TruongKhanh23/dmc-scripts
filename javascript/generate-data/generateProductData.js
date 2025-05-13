@@ -83,7 +83,12 @@ function generateVariantsForProduct(product) {
     const variant = {
       product: product.name,
       volume: volume,
-      name: volume === "330" ? "Thường" : "Lớn",
+      name:
+        product.name === "Cà phê muối chai" && volume === "330"
+          ? "Thường"
+          : volume === "330"
+          ? "Thường"
+          : "Lớn",
     };
     variants.push(variant);
   });
@@ -96,7 +101,7 @@ function generatePricesForProduct(product) {
 
   let volumes = [];
   if (product.name === CA_PHE_MUOI_CHAI) {
-    volumes = ["300"];
+    volumes = ["330"];
   } else if (
     product.category === "Cà phê" &&
     product.name !== CA_PHE_MUOI_CHAI
