@@ -1,9 +1,9 @@
 const branch = "Số 68 Nguyễn Huệ - Q.1";
 const HE_THONG_CHUNG = "";
 const NGUYEN_HUE = "Số 68 Nguyễn Huệ - Q.1";
-const CA_PHE_MUOI_CHAI = "Cà phê muối chai"
+const CA_PHE_MUOI_CHAI = "Cà phê muối chai";
 let salesChannels = [];
-if(branch === NGUYEN_HUE){
+if (branch === NGUYEN_HUE) {
   salesChannels = ["Tại quán", "Grab", "Be", "Shopee"];
 } else {
   salesChannels = ["Tại quán", "Grab", "Be", "Shopee", "VILL", "RIO"];
@@ -29,7 +29,7 @@ const volumePricesByBranch = {
 
 function generatePriceByVolume(volume, productName, salesChannel) {
   if (productName === CA_PHE_MUOI_CHAI) {
-    if(salesChannel === 'Tại quán') {
+    if (salesChannel === "Tại quán") {
       return 60000;
     } else {
       return 65000;
@@ -96,10 +96,17 @@ function generatePricesForProduct(product) {
 
   let volumes = [];
   if (product.name === CA_PHE_MUOI_CHAI) {
-    volumes = ["500"];
-  } else if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
+    volumes = ["300"];
+  } else if (
+    product.category === "Cà phê" &&
+    product.name !== CA_PHE_MUOI_CHAI
+  ) {
     volumes = ["330", "600"];
-  } else if (product.category === "Trà" || product.category === "Sữa chua" || product.category === "Nước giải khát") {
+  } else if (
+    product.category === "Trà" ||
+    product.category === "Sữa chua" ||
+    product.category === "Nước giải khát"
+  ) {
     volumes = ["500"];
   } else if (
     product.name === "Kem mặn thêm (Salted cream)" ||
@@ -127,7 +134,7 @@ function generatePricesForProduct(product) {
   return prices;
 }
 
-function generateData(products) {
+export default function generateData(products) {
   let variants = [];
   let prices = [];
   let categories = [];
@@ -241,5 +248,4 @@ const products = [
 ];
 
 // Gọi hàm để tạo cấu trúc data
-const data = generateData(products);
-console.log(data);
+//const data = generateData(products);
