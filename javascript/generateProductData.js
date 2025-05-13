@@ -1,6 +1,6 @@
 function generatePriceByVolume(volume, productName) {
-  if (productName === "Cà phê chai") {
-    return 60000; // Xử lý riêng cho "Cà phê chai"
+  if (productName === "Cà phê muối chai") {
+    return 60000; // Xử lý riêng cho "Cà phê muối chai"
   }
 
   switch (volume) {
@@ -21,12 +21,12 @@ function generateVariantsForProduct(product) {
 
   // Điều chỉnh volume theo category
   let volumes = [];
-  if (product.category === "Cà phê" && product.name !== "Cà phê chai") {
+  if (product.category === "Cà phê" && product.name !== "Cà phê muối chai") {
     volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
   } else if (
     product.category === "Trà" ||
     product.category === "Sữa chua" ||
-    product.name === "Cà phê chai"
+    product.name === "Cà phê muối chai"
   ) {
     volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
   } else if (
@@ -54,9 +54,9 @@ function generatePricesForProduct(product) {
 
   // Điều chỉnh volume theo category
   let volumes = [];
-  if (product.name === "Cà phê chai") {
-    volumes = ["500"]; // Cà phê chai chỉ có thể tích 500
-  } else if (product.category === "Cà phê" && product.name !== "Cà phê chai") {
+  if (product.name === "Cà phê muối chai") {
+    volumes = ["500"]; // Cà phê muối chai chỉ có thể tích 500
+  } else if (product.category === "Cà phê" && product.name !== "Cà phê muối chai") {
     volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
   } else if (product.category === "Trà" || product.category === "Sữa chua") {
     volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
@@ -118,18 +118,6 @@ function generateData(products) {
 
 // Dữ liệu sản phẩm cơ bản với category và description
 const products = [
-  { name: "Trà me", category: "Trà", description: "Trà me (Tamarind tea)" },
-  { name: "Trà tắc xi muối", category: "Trà", description: "Trà tắc xi muối" },
-  {
-    name: "Chanh dây",
-    category: "Trà",
-    description: "Chanh dây (Passion juice)",
-  },
-  {
-    name: "Ca cao sữa",
-    category: "Trà",
-    description: "Ca cao sữa (Milk cocoa)",
-  },
   {
     name: "Cà phê muối",
     category: "Cà phê",
@@ -141,19 +129,9 @@ const products = [
     description: "Cà phê dừa (Coconut coffee)",
   },
   {
-    name: "Cà phê chai",
+    name: "Sữa tươi cà phê",
     category: "Cà phê",
-    description: "Cà phê chai (Coffee bottle)",
-  },
-  {
-    name: "Cà phê đen",
-    category: "Cà phê",
-    description: "Cà phê đen (Black coffee)",
-  },
-  {
-    name: "Cà phê sữa",
-    category: "Cà phê",
-    description: "Cà phê sữa (Milk coffee)",
+    description: "Sữa tươi cà phê (Fresh milk coffee)",
   },
   {
     name: "Bạc sỉu",
@@ -161,35 +139,59 @@ const products = [
     description: "Bạc sỉu (White coffee)",
   },
   {
-    name: "Cà phê bắp",
-    category: "Cà phê",
-    description: "Cà phê bắp (Corn coffee)",
-  },
-  {
-    name: "Sữa tươi cà phê",
-    category: "Cà phê",
-    description: "Sữa tươi cà phê (Fresh milk coffee)",
-  },
-  {
     name: "Cà phê kem phô mai",
     category: "Cà phê",
     description: "Cà phê kem phô mai",
   },
-  { name: "Sữa chua đá", category: "Sữa chua", description: "Sữa chua đá" },
+  {
+    name: "Cà phê sữa",
+    category: "Cà phê",
+    description: "Cà phê sữa (Milk coffee)",
+  },
+  {
+    name: "Cà phê đen",
+    category: "Cà phê",
+    description: "Cà phê đen (Black coffee)",
+  },
+  {
+    name: "Cà phê muối chai",
+    category: "Cà phê",
+    description: "Cà phê muối chai (Coffee bottle)",
+  },
+  {
+    name: "Ca cao sữa",
+    category: "Trà",
+    description: "Ca cao sữa (Milk cocoa)",
+  },
+  {
+    name: "Trà đác thơm",
+    category: "Trà",
+    description: "Trà đác thơm",
+  },
+  {
+    name: "Trà tắc xi muối",
+    category: "Trà",
+    description: "Trà tắc xi muối",
+  },
+  {
+    name: "Trà me",
+    category: "Trà",
+    description: "Trà me (Tamarind tea)",
+  },
   {
     name: "Sữa chua chanh dây",
     category: "Sữa chua",
     description: "Sữa chua chanh dây (Passion fruit yogurt)",
   },
   {
-    name: "Kem mặn thêm",
-    category: "Cà phê",
-    description: "Kem mặn thêm (Salted cream)",
+    name: "Chanh dây",
+    category: "Trà",
+    description: "Chanh dây (Passion juice)",
   },
   {
-    name: "Cà phê thêm",
-    category: "Cà phê",
-    description: "Cà phê thêm (Extra coffee)",
+    name: "Sữa chua đá",
+    category: "Sữa chua",
+    description: "Sữa chua đá",
   },
 ];
 
