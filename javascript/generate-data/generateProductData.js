@@ -1,19 +1,55 @@
-function generatePriceByVolume(volume, productName) {
-  if (productName === "Cà phê muối chai") {
-    return 60000; // Xử lý riêng cho "Cà phê muối chai"
+const branch = "Số 68 Nguyễn Huệ - Q.1";
+const HE_THONG_CHUNG = "";
+const NGUYEN_HUE = "Số 68 Nguyễn Huệ - Q.1";
+const CA_PHE_MUOI_CHAI = "Cà phê muối chai"
+let salesChannels = [];
+if(branch === NGUYEN_HUE){
+  salesChannels = ["Tại quán", "Grab", "Be", "Shopee"];
+} else {
+  salesChannels = ["Tại quán", "Grab", "Be", "Shopee", "VILL", "RIO"];
+}
+
+const volumePricesByBranch = {
+  "Số 68 Nguyễn Huệ - Q.1": {
+    330: 20000,
+    500: 25000,
+    600: 25000,
+    20: 5000,
+  },
+  "": {
+    330: 18000,
+    500: 20000,
+    600: 25000,
+    20: 5000,
+  },
+  // Thêm chi nhánh khác ở đây nếu cần
+};
+
+// Generate product data
+
+function generatePriceByVolume(volume, productName, salesChannel) {
+  if (productName === CA_PHE_MUOI_CHAI) {
+    return 60000;
   }
 
-  switch (volume) {
-    case "330":
-      return 20000;
-    case "500":
-    case "600":
-      return 25000;
-    case "20":
-      return 5000;
-    default:
-      return 0;
+  const branchPrices = volumePricesByBranch[branch] || volumePricesByBranch[""];
+
+  // Áp dụng giá đặc biệt cho chi nhánh Nguyễn Huệ
+  const grabShopeeBe = ["Grab", "Be", "Shopee"];
+  const villRio = ["Vill", "Rio"];
+
+  if (grabShopeeBe.includes(salesChannel)) {
+    if (volume === "330") return 22000;
+    if (volume === "600") return 29000;
+    if (volume === "500") return 25000;
   }
+
+  if (branch !== NGUYEN_HUE && villRio.includes(salesChannel)) {
+    // Không áp dụng Vill, Rio cho Nguyễn Huệ
+    return 0;
+  }
+
+  return branchPrices[volume] ?? 0;
 }
 
 function generateVariantsForProduct(product) {
@@ -21,15 +57,16 @@ function generateVariantsForProduct(product) {
 
   // Điều chỉnh volume theo category
   let volumes = [];
-  if (product.category === "Cà phê" && product.name !== "Cà phê muối chai") {
+  if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
     volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
   } else if (
     product.category === "Trà" ||
     product.category === "Sữa chua" ||
-    product.category === "Nước giải khát" ||
-    product.name === "Cà phê muối chai"
+    product.category === "Nước giải khát"
   ) {
     volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
+  } else if (product.name === CA_PHE_MUOI_CHAI) {
+    volumes = ["330"];
   } else if (
     product.name === "Kem mặn thêm (Salted cream)" ||
     product.name === "Cà phê thêm (Extra coffee)"
@@ -42,7 +79,7 @@ function generateVariantsForProduct(product) {
     const variant = {
       product: product.name,
       volume: volume,
-      name: volume === "330" ? "Nhỏ" : "Lớn",
+      name: volume === "330" ? "Thường" : "Lớn",
     };
     variants.push(variant);
   });
@@ -53,31 +90,34 @@ function generateVariantsForProduct(product) {
 function generatePricesForProduct(product) {
   const prices = [];
 
-  // Điều chỉnh volume theo category
   let volumes = [];
-  if (product.name === "Cà phê muối chai") {
-    volumes = ["500"]; // Cà phê muối chai chỉ có thể tích 500
-  } else if (product.category === "Cà phê" && product.name !== "Cà phê muối chai") {
-    volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
+  if (product.name === CA_PHE_MUOI_CHAI) {
+    volumes = ["500"];
+  } else if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
+    volumes = ["330", "600"];
   } else if (product.category === "Trà" || product.category === "Sữa chua" || product.category === "Nước giải khát") {
-    volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
+    volumes = ["500"];
   } else if (
     product.name === "Kem mặn thêm (Salted cream)" ||
     product.name === "Cà phê thêm (Extra coffee)"
   ) {
-    volumes = ["20"]; // Kem mặn thêm và Cà phê thêm chỉ có volume 20
+    volumes = ["20"];
   }
 
-  // Tạo các giá cho mỗi variant
-  volumes.forEach((volume) => {
-    const price = {
-      product: product.name,
-      variant: volume === "330" ? "Nhỏ" : "Lớn",
-      amount: generatePriceByVolume(volume, product.name), // Truyền tên sản phẩm vào
-      branch: "Nguyễn Huệ",
-      salesChannel: "Tại quán",
-    };
-    prices.push(price);
+  // Lặp salesChannel và volumes để tạo giá
+  salesChannels.forEach((channel) => {
+    volumes.forEach((volume) => {
+      const amount = generatePriceByVolume(volume, product.name, channel);
+      if (amount > 0) {
+        prices.push({
+          product: product.name,
+          variant: volume === "330" ? "Thường" : "Lớn",
+          amount,
+          branch,
+          salesChannel: channel,
+        });
+      }
+    });
   });
 
   return prices;
@@ -110,8 +150,8 @@ function generateData(products) {
     })),
     variants: variants,
     prices: prices,
-    branches: ["Nguyễn Huệ"],
-    salesChannels: ["Tại quán"],
+    branches: [branch],
+    salesChannels: salesChannels,
   };
 
   return data;
@@ -197,5 +237,5 @@ const products = [
 ];
 
 // Gọi hàm để tạo cấu trúc data
-const generatedData = generateData(products);
-console.log(generatedData);
+const data = generateData(products);
+console.log(data);
