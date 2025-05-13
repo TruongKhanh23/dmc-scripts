@@ -1,30 +1,3 @@
-const branch = "Số 68 Nguyễn Huệ - Q.1";
-const HE_THONG_CHUNG = "";
-const NGUYEN_HUE = "Số 68 Nguyễn Huệ - Q.1";
-const CA_PHE_MUOI_CHAI = "Cà phê muối chai"
-const salesChannels = [];
-if(branch === NGUYEN_HUE){
-  salesChannels = ["Tại quán", "Grab", "Be", "Shopee"];
-} else {
-  salesChannels = ["Tại quán", "Grab", "Be", "Shopee", "VILL", "RIO"];
-}
-
-const volumePricesByBranch = {
-  "Số 68 Nguyễn Huệ - Q.1": {
-    330: 20000,
-    500: 25000,
-    600: 25000,
-    20: 5000,
-  },
-  "": {
-    330: 18000,
-    500: 20000,
-    600: 25000,
-    20: 5000,
-  },
-  // Thêm chi nhánh khác ở đây nếu cần
-};
-
 // Generate SQL script insert products
 
 function generateSQL(data) {
@@ -130,219 +103,732 @@ function generateSQL(data) {
 
   return sql;
 }
-
-// Generate product data
-
-function generatePriceByVolume(volume, productName, salesChannel) {
-  if (productName === CA_PHE_MUOI_CHAI) {
-    return 60000;
-  }
-
-  const branchPrices = volumePricesByBranch[branch] || volumePricesByBranch[""];
-
-  // Áp dụng giá đặc biệt cho chi nhánh Nguyễn Huệ
-  const grabShopeeBe = ["Grab", "Be", "Shopee"];
-  const villRio = ["Vill", "Rio"];
-
-  if (grabShopeeBe.includes(salesChannel)) {
-    if (volume === "330") return 22000;
-    if (volume === "600") return 29000;
-    if (volume === "500") return 25000;
-  }
-
-  if (branch !== NGUYEN_HUE && villRio.includes(salesChannel)) {
-    // Không áp dụng Vill, Rio cho Nguyễn Huệ
-    return 0;
-  }
-
-  return branchPrices[volume] ?? 0;
-}
-
-function generateVariantsForProduct(product) {
-  const variants = [];
-
-  // Điều chỉnh volume theo category
-  let volumes = [];
-  if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
-    volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
-  } else if (
-    product.category === "Trà" ||
-    product.category === "Sữa chua" ||
-    product.category === "Nước giải khát" ||
-    product.name === CA_PHE_MUOI_CHAI
-  ) {
-    volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
-  } else if (
-    product.name === "Kem mặn thêm (Salted cream)" ||
-    product.name === "Cà phê thêm (Extra coffee)"
-  ) {
-    volumes = ["20"]; // Kem mặn thêm và Cà phê thêm chỉ có volume 20
-  }
-
-  // Tạo các variants cho mỗi volume
-  volumes.forEach((volume) => {
-    const variant = {
-      product: product.name,
-      volume: volume,
-      name: volume === "330" ? "Nhỏ" : "Lớn",
-    };
-    variants.push(variant);
-  });
-
-  return variants;
-}
-
-function generatePricesForProduct(product) {
-  const prices = [];
-
-  let volumes = [];
-  if (product.name === CA_PHE_MUOI_CHAI) {
-    volumes = ["500"];
-  } else if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
-    volumes = ["330", "600"];
-  } else if (product.category === "Trà" || product.category === "Sữa chua" || product.category === "Nước giải khát") {
-    volumes = ["500"];
-  } else if (
-    product.name === "Kem mặn thêm (Salted cream)" ||
-    product.name === "Cà phê thêm (Extra coffee)"
-  ) {
-    volumes = ["20"];
-  }
-
-  // Lặp salesChannel và volumes để tạo giá
-  salesChannels.forEach((channel) => {
-    volumes.forEach((volume) => {
-      const amount = generatePriceByVolume(volume, product.name, channel);
-      if (amount > 0) {
-        prices.push({
-          product: product.name,
-          variant: volume === "330" ? "Nhỏ" : "Lớn",
-          amount,
-          branch,
-          salesChannel: channel,
-        });
-      }
-    });
-  });
-
-  return prices;
-}
-
-function generateData(products) {
-  let variants = [];
-  let prices = [];
-  let categories = [];
-
-  products.forEach((product) => {
-    // Tạo các variant và giá cho mỗi sản phẩm
-    variants = variants.concat(generateVariantsForProduct(product));
-    prices = prices.concat(generatePricesForProduct(product));
-
-    // Thêm category nếu chưa có
-    if (!categories.includes(product.category)) {
-      categories.push(product.category);
-    }
-  });
-
-  // Tạo cấu trúc data theo yêu cầu
-  const data = {
-    categories: categories,
-    volumes: ["500", "330", "600", "20"],
-    products: products.map((product) => ({
-      name: product.name,
-      category: product.category,
-      description: product.description,
-    })),
-    variants: variants,
-    prices: prices,
-    branches: [branch],
-    salesChannels: salesChannels,
-  };
-
-  return data;
-}
-
-// Dữ liệu sản phẩm cơ bản với category và description
-const products = [
-  {
-    name: "Cà phê muối",
-    category: "Cà phê",
-    description: "Cà phê muối (Salted coffee)",
-  },
-  {
-    name: "Cà phê dừa",
-    category: "Cà phê",
-    description: "Cà phê dừa (Coconut coffee)",
-  },
-  {
-    name: "Sữa tươi cà phê",
-    category: "Cà phê",
-    description: "Sữa tươi cà phê (Fresh milk coffee)",
-  },
-  {
-    name: "Bạc sỉu",
-    category: "Cà phê",
-    description: "Bạc sỉu (White coffee)",
-  },
-  {
-    name: "Cà phê kem phô mai",
-    category: "Cà phê",
-    description: "Cà phê kem phô mai",
-  },
-  {
-    name: "Cà phê sữa",
-    category: "Cà phê",
-    description: "Cà phê sữa (Milk coffee)",
-  },
-  {
-    name: "Cà phê đen",
-    category: "Cà phê",
-    description: "Cà phê đen (Black coffee)",
-  },
-  {
-    name: "Cà phê muối chai",
-    category: "Cà phê",
-    description: "Cà phê muối chai (Coffee bottle)",
-  },
-  {
-    name: "Ca cao sữa",
-    category: "Nước giải khát",
-    description: "Ca cao sữa (Milk cocoa)",
-  },
-  {
-    name: "Trà đác thơm",
-    category: "Trà",
-    description: "Trà đác thơm",
-  },
-  {
-    name: "Trà tắc xi muối",
-    category: "Trà",
-    description: "Trà tắc xi muối",
-  },
-  {
-    name: "Trà me",
-    category: "Trà",
-    description: "Trà me (Tamarind tea)",
-  },
-  {
-    name: "Sữa chua chanh dây",
-    category: "Sữa chua",
-    description: "Sữa chua chanh dây (Passion fruit yogurt)",
-  },
-  {
-    name: "Chanh dây",
-    category: "Nước giải khát",
-    description: "Chanh dây (Passion juice)",
-  },
-  {
-    name: "Sữa chua đá",
-    category: "Sữa chua",
-    description: "Sữa chua đá",
-  },
-];
-
 // Gọi hàm để tạo cấu trúc data
-const data = generateData(products);
+const data = {
+  categories: [ 'Cà phê', 'Nước giải khát', 'Trà', 'Sữa chua' ],
+  volumes: [ '500', '330', '600', '20' ],
+  products: [
+    {
+      name: 'Cà phê muối',
+      category: 'Cà phê',
+      description: 'Cà phê muối (Salted coffee)'
+    },
+    {
+      name: 'Cà phê dừa',
+      category: 'Cà phê',
+      description: 'Cà phê dừa (Coconut coffee)'
+    },
+    {
+      name: 'Sữa tươi cà phê',
+      category: 'Cà phê',
+      description: 'Sữa tươi cà phê (Fresh milk coffee)'
+    },
+    {
+      name: 'Bạc sỉu',
+      category: 'Cà phê',
+      description: 'Bạc sỉu (White coffee)'
+    },
+    {
+      name: 'Cà phê kem phô mai',
+      category: 'Cà phê',
+      description: 'Cà phê kem phô mai'
+    },
+    {
+      name: 'Cà phê sữa',
+      category: 'Cà phê',
+      description: 'Cà phê sữa (Milk coffee)'
+    },
+    {
+      name: 'Cà phê đen',
+      category: 'Cà phê',
+      description: 'Cà phê đen (Black coffee)'
+    },
+    {
+      name: 'Cà phê muối chai',
+      category: 'Cà phê',
+      description: 'Cà phê muối chai (Coffee bottle)'
+    },
+    {
+      name: 'Ca cao sữa',
+      category: 'Nước giải khát',
+      description: 'Ca cao sữa (Milk cocoa)'
+    },
+    {
+      name: 'Trà đác thơm',
+      category: 'Trà',
+      description: 'Trà đác thơm'
+    },
+    {
+      name: 'Trà tắc xi muối',
+      category: 'Trà',
+      description: 'Trà tắc xi muối'
+    },
+    {
+      name: 'Trà me',
+      category: 'Trà',
+      description: 'Trà me (Tamarind tea)'
+    },
+    {
+      name: 'Sữa chua chanh dây',
+      category: 'Sữa chua',
+      description: 'Sữa chua chanh dây (Passion fruit yogurt)'
+    },
+    {
+      name: 'Chanh dây',
+      category: 'Nước giải khát',
+      description: 'Chanh dây (Passion juice)'
+    },
+    {
+      name: 'Sữa chua đá',
+      category: 'Sữa chua',
+      description: 'Sữa chua đá'
+    }
+  ],
+  variants: [
+    { product: 'Cà phê muối', volume: '330', name: 'Thường' },
+    { product: 'Cà phê muối', volume: '600', name: 'Lớn' },
+    { product: 'Cà phê dừa', volume: '330', name: 'Thường' },
+    { product: 'Cà phê dừa', volume: '600', name: 'Lớn' },
+    { product: 'Sữa tươi cà phê', volume: '330', name: 'Thường' },
+    { product: 'Sữa tươi cà phê', volume: '600', name: 'Lớn' },
+    { product: 'Bạc sỉu', volume: '330', name: 'Thường' },
+    { product: 'Bạc sỉu', volume: '600', name: 'Lớn' },
+    { product: 'Cà phê kem phô mai', volume: '330', name: 'Thường' },
+    { product: 'Cà phê kem phô mai', volume: '600', name: 'Lớn' },
+    { product: 'Cà phê sữa', volume: '330', name: 'Thường' },
+    { product: 'Cà phê sữa', volume: '600', name: 'Lớn' },
+    { product: 'Cà phê đen', volume: '330', name: 'Thường' },
+    { product: 'Cà phê đen', volume: '600', name: 'Lớn' },
+    { product: 'Cà phê muối chai', volume: '330', name: 'Thường' },
+    { product: 'Ca cao sữa', volume: '500', name: 'Lớn' },
+    { product: 'Trà đác thơm', volume: '500', name: 'Lớn' },
+    { product: 'Trà tắc xi muối', volume: '500', name: 'Lớn' },
+    { product: 'Trà me', volume: '500', name: 'Lớn' },
+    { product: 'Sữa chua chanh dây', volume: '500', name: 'Lớn' },
+    { product: 'Chanh dây', volume: '500', name: 'Lớn' },
+    { product: 'Sữa chua đá', volume: '500', name: 'Lớn' }
+  ],
+  prices: [
+    {
+      product: 'Cà phê muối',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê muối',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê dừa',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Sữa tươi cà phê',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1'9m,
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Bạc sỉu',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê kem phô mai',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê sữa',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Thường',
+      amount: 20000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Thường',
+      amount: 22000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê đen',
+      variant: 'Lớn',
+      amount: 29000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Cà phê muối chai',
+      variant: 'Thường',
+      amount: 60000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Cà phê muối chai',
+      variant: 'Thường',
+      amount: 65000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Cà phê muối chai',
+      variant: 'Thường',
+      amount: 65000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Cà phê muối chai',
+      variant: 'Thường',
+      amount: 65000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Ca cao sữa',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Ca cao sữa',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Ca cao sữa',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Ca cao sữa',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Trà đác thơm',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Trà đác thơm',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Trà đác thơm',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Trà đác thơm',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Trà tắc xi muối',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Trà tắc xi muối',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Trà tắc xi muối',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Trà tắc xi muối',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Trà me',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Trà me',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Trà me',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Trà me',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Sữa chua chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Sữa chua chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Sữa chua chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Sữa chua chanh dây',
+      variant: 2m'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Chanh dây',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    },
+    {
+      product: 'Sữa chua đá',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Tại quán'
+    },
+    {
+      product: 'Sữa chua đá',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Grab'
+    },
+    {
+      product: 'Sữa chua đá',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Be'
+    },
+    {
+      product: 'Sữa chua đá',
+      variant: 'Lớn',
+      amount: 25000,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
+      salesChannel: 'Shopee'
+    }
+  ],
+  branches: [ 'Số 68 Nguyễn Huệ - Q.1' ],
+  salesChannels: [ 'Tại quán', 'Grab', 'Be', 'Shopee' ]
+};
 
 // Gọi hàm để generate SQL
 const sql = generateSQL(data);

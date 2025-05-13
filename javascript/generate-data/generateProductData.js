@@ -29,7 +29,11 @@ const volumePricesByBranch = {
 
 function generatePriceByVolume(volume, productName, salesChannel) {
   if (productName === CA_PHE_MUOI_CHAI) {
-    return 60000;
+    if(salesChannel === 'Tại quán') {
+      return 60000;
+    } else {
+      return 65000;
+    }
   }
 
   const branchPrices = volumePricesByBranch[branch] || volumePricesByBranch[""];
