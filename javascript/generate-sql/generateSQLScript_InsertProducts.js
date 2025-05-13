@@ -381,7 +381,7 @@ const data = {
       product: 'Bạc sỉu',
       variant: 'Thường',
       amount: 20000,
-      branch: 'Số 68 Nguyễn Huệ - Q.1'9m,
+      branch: 'Số 68 Nguyễn Huệ - Q.1',
       salesChannel: 'Tại quán'
     },
     {
