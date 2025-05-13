@@ -16,5 +16,6 @@
     "url": "https://github.com/TruongKhanh23/dmc-scripts/issues"
   },
   "homepage": "https://github.com/TruongKhanh23/dmc-scripts#readme",
-  "description": ""
+  "description": "",
+  "type": "module"
 }
