@@ -1,7 +1,13 @@
 const branch = "Số 68 Nguyễn Huệ - Q.1";
 const HE_THONG_CHUNG = "";
 const NGUYEN_HUE = "Số 68 Nguyễn Huệ - Q.1";
-const salesChannels = ["Tại quán", "Grab", "Be", "Shopee", "Vill", "Rio"];
+const CA_PHE_MUOI_CHAI = "Cà phê muối chai"
+const salesChannels = [];
+if(branch === NGUYEN_HUE){
+  salesChannels = ["Tại quán", "Grab", "Be", "Shopee"];
+} else {
+  salesChannels = ["Tại quán", "Grab", "Be", "Shopee", "VILL", "RIO"];
+}
 
 const volumePricesByBranch = {
   "Số 68 Nguyễn Huệ - Q.1": {
@@ -128,7 +134,7 @@ function generateSQL(data) {
 // Generate product data
 
 function generatePriceByVolume(volume, productName, salesChannel) {
-  if (productName === "Cà phê chai") {
+  if (productName === CA_PHE_MUOI_CHAI) {
     return 60000;
   }
 
@@ -144,7 +150,7 @@ function generatePriceByVolume(volume, productName, salesChannel) {
     if (volume === "500") return 25000;
   }
 
-  if (villRio.includes(salesChannel)) {
+  if (branch !== NGUYEN_HUE && villRio.includes(salesChannel)) {
     // Không áp dụng Vill, Rio cho Nguyễn Huệ
     return 0;
   }
@@ -157,13 +163,13 @@ function generateVariantsForProduct(product) {
 
   // Điều chỉnh volume theo category
   let volumes = [];
-  if (product.category === "Cà phê" && product.name !== "Cà phê chai") {
+  if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
     volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
   } else if (
     product.category === "Trà" ||
     product.category === "Sữa chua" ||
     product.category === "Nước giải khát" ||
-    product.name === "Cà phê chai"
+    product.name === CA_PHE_MUOI_CHAI
   ) {
     volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
   } else if (
@@ -190,9 +196,9 @@ function generatePricesForProduct(product) {
   const prices = [];
 
   let volumes = [];
-  if (product.name === "Cà phê chai") {
+  if (product.name === CA_PHE_MUOI_CHAI) {
     volumes = ["500"];
-  } else if (product.category === "Cà phê" && product.name !== "Cà phê chai") {
+  } else if (product.category === "Cà phê" && product.name !== CA_PHE_MUOI_CHAI) {
     volumes = ["330", "600"];
   } else if (product.category === "Trà" || product.category === "Sữa chua" || product.category === "Nước giải khát") {
     volumes = ["500"];
