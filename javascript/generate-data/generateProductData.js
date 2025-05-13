@@ -26,6 +26,7 @@ function generateVariantsForProduct(product) {
   } else if (
     product.category === "Trà" ||
     product.category === "Sữa chua" ||
+    product.category === "Nước giải khát" ||
     product.name === "Cà phê muối chai"
   ) {
     volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
@@ -58,7 +59,7 @@ function generatePricesForProduct(product) {
     volumes = ["500"]; // Cà phê muối chai chỉ có thể tích 500
   } else if (product.category === "Cà phê" && product.name !== "Cà phê muối chai") {
     volumes = ["330", "600"]; // Cà phê chỉ có các thể tích 330 và 600
-  } else if (product.category === "Trà" || product.category === "Sữa chua") {
+  } else if (product.category === "Trà" || product.category === "Sữa chua" || product.category === "Nước giải khát") {
     volumes = ["500"]; // Trà và Sữa chua chỉ có thể tích 500
   } else if (
     product.name === "Kem mặn thêm (Salted cream)" ||
@@ -160,7 +161,7 @@ const products = [
   },
   {
     name: "Ca cao sữa",
-    category: "Trà",
+    category: "Nước giải khát",
     description: "Ca cao sữa (Milk cocoa)",
   },
   {
@@ -185,7 +186,7 @@ const products = [
   },
   {
     name: "Chanh dây",
-    category: "Trà",
+    category: "Nước giải khát",
     description: "Chanh dây (Passion juice)",
   },
   {
