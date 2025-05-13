@@ -764,7 +764,7 @@ const data = {
     },
     {
       product: 'Sữa chua chanh dây',
-      variant: 2m'Lớn',
+      variant: 'Lớn',
       amount: 25000,
       branch: 'Số 68 Nguyễn Huệ - Q.1',
       salesChannel: 'Shopee'
