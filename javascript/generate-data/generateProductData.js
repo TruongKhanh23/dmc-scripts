@@ -1,4 +1,4 @@
-const branch = "Số 68 Nguyễn Huệ - Q.1";
+const branch = "";
 const HE_THONG_CHUNG = "";
 const NGUYEN_HUE = "Số 68 Nguyễn Huệ - Q.1";
 const CA_PHE_MUOI_CHAI = "Cà phê muối chai";
