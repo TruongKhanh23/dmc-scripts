@@ -21,4 +21,4 @@ LEFT JOIN public.product_variants v ON v.product_id = p.id
 LEFT JOIN public.product_volumes vol ON v.volume_id = vol.id
 LEFT JOIN public.product_prices pr ON pr.variant_id = v.id
 LEFT JOIN public.sales_channels sc ON pr.sales_channel_id = sc.id
-LEFT JOIN public.branches b ON pr.branch_id = b.id;
+LEFT JOIN public.branches b ON pr.branch_id = b.id; -- pr.branch_id IS NULL;
