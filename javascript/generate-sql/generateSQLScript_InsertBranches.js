@@ -1,5 +1,5 @@
 export default function generateInsertBranches(branches) {
-  return branches.map(branch => {
+  const inserts = branches.map(branch => {
     const { name, address } = branch;
 
     return `
@@ -26,5 +26,9 @@ BEGIN
 END
 $$;
     `.trim();
-  }).join('\n\n');
+  });
+
+  inserts.push('SELECT * FROM public.branches;');
+
+  return inserts.join('\n\n');
 }
