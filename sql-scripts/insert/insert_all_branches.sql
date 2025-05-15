@@ -25,7 +25,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = 'Số 68 Nguyễn Huệ - Q.1' OR address = 'Số 68 Nguyễn Huệ, phường Bến Nghé, Quận 1'
+    WHERE name = 'Nguyễn Huệ - Q.1' OR address = 'Số 68 Nguyễn Huệ, phường Bến Nghé, Quận 1'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -37,7 +37,7 @@ BEGIN
       now(),
       now(),
       false,
-      'Số 68 Nguyễn Huệ - Q.1',
+      'Nguyễn Huệ - Q.1',
       'Số 68 Nguyễn Huệ, phường Bến Nghé, Quận 1'
     );
   END IF;
@@ -347,7 +347,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = 'Số 7 Bình Long - Q.Bình Tân' OR address = 'Số 7 Bình Long, phường Bình Hưng Hòa A, quận Bình Tân'
+    WHERE name = 'Bình Long - Q.Bình Tân' OR address = 'Số 7 Bình Long, phường Bình Hưng Hòa A, quận Bình Tân'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -359,7 +359,7 @@ BEGIN
       now(),
       now(),
       false,
-      'Số 7 Bình Long - Q.Bình Tân',
+      'Bình Long - Q.Bình Tân',
       'Số 7 Bình Long, phường Bình Hưng Hòa A, quận Bình Tân'
     );
   END IF;
@@ -531,7 +531,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = '' OR address = 'Cà Phê Muối Chú Long - 67 Hậu Giang'
+    WHERE name = '67 Hậu Giang' OR address = 'Cà Phê Muối Chú Long - 67 Hậu Giang'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -543,7 +543,7 @@ BEGIN
       now(),
       now(),
       false,
-      '',
+      '67 Hậu Giang',
       'Cà Phê Muối Chú Long - 67 Hậu Giang'
     );
   END IF;
@@ -554,7 +554,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = '' OR address = 'Cà Phê Muối Chú Long - 190 Huỳnh Văn Bánh'
+    WHERE name = '190 Huỳnh Văn Bánh' OR address = 'Cà Phê Muối Chú Long - 190 Huỳnh Văn Bánh'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -566,7 +566,7 @@ BEGIN
       now(),
       now(),
       false,
-      '',
+      '190 Huỳnh Văn Bánh',
       'Cà Phê Muối Chú Long - 190 Huỳnh Văn Bánh'
     );
   END IF;
@@ -692,7 +692,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = 'Số 25 Trưng Nữ Vương - Vĩnh Long' OR address = 'Số 25 Trưng Nữ Vương, Phường 1, TP Vĩnh Long, Tỉnh Vĩnh Long'
+    WHERE name = 'Trưng Nữ Vương - Vĩnh Long' OR address = 'Số 25 Trưng Nữ Vương, Phường 1, TP Vĩnh Long, Tỉnh Vĩnh Long'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -704,7 +704,7 @@ BEGIN
       now(),
       now(),
       false,
-      'Số 25 Trưng Nữ Vương - Vĩnh Long',
+      'Trưng Nữ Vương - Vĩnh Long',
       'Số 25 Trưng Nữ Vương, Phường 1, TP Vĩnh Long, Tỉnh Vĩnh Long'
     );
   END IF;
@@ -738,7 +738,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = 'Số 88 quốc lộ 62 - Tân An' OR address = 'Số 88 quốc lộ 62 , Phường 2 , Thành phố Tân An , Long An'
+    WHERE name = 'Quốc lộ 62 - Tân An' OR address = 'Số 88 quốc lộ 62 , Phường 2 , Thành phố Tân An , Long An'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -750,7 +750,7 @@ BEGIN
       now(),
       now(),
       false,
-      'Số 88 quốc lộ 62 - Tân An',
+      'Quốc lộ 62 - Tân An',
       'Số 88 quốc lộ 62 , Phường 2 , Thành phố Tân An , Long An'
     );
   END IF;
@@ -761,7 +761,7 @@ DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.branches
-    WHERE name = 'Số 32 đường Trần Hưng Đạo - Phan Thiết' OR address = 'Số 32 đường Trần Hưng Đạo, Thành phố Phan Thiết, Bình Thuận'
+    WHERE name = 'Đường Trần Hưng Đạo - Phan Thiết' OR address = 'Số 32 đường Trần Hưng Đạo, Thành phố Phan Thiết, Bình Thuận'
   ) THEN
     INSERT INTO public.branches (
       id, created_by, updated_by, created_at, updated_at, deleted, name, address
@@ -773,7 +773,7 @@ BEGIN
       now(),
       now(),
       false,
-      'Số 32 đường Trần Hưng Đạo - Phan Thiết',
+      'Đường Trần Hưng Đạo - Phan Thiết',
       'Số 32 đường Trần Hưng Đạo, Thành phố Phan Thiết, Bình Thuận'
     );
   END IF;
@@ -964,4 +964,4 @@ BEGIN
 END
 $$;
 
-SELECT * FROM public.branches
+SELECT * FROM public.branches;
