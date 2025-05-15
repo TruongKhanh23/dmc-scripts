@@ -1,5 +1,10 @@
 import branches from "../../data/branchesWithoutName.js"
 
+function capitalizeFirstLetter(str) {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function fillInBranchName() {
 branches.forEach((branch) => {
   const address = branch.address;
@@ -7,6 +12,8 @@ branches.forEach((branch) => {
   // Tách tên đường
   let street = address.split(",")[0].trim();
   street = street.replace(/^\s*\d+(?:[\/\-]?\d*[A-Za-z]?)?\s*/, "");
+
+  street = capitalizeFirstLetter(street);
 
   // Tách quận (sau "Q." hoặc "Quận", đến trước dấu phẩy)
   const districtMatch = address.match(/(?:Quận|Q\.)\s*([^,]+)/i);
