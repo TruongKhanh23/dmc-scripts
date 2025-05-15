@@ -20,21 +20,17 @@ branches.forEach((branch) => {
       : "";
 
   // Nếu bất kỳ phần nào chứa "Cà phê muối chú Long" thì gán phần đó bằng rỗng
-  const target = "Cà phê muối chú Long".toLowerCase();
+  const target = "Cà phê muối chú Long - ".toLowerCase();
   if (
     [street, district, city].some((part) => part.toLowerCase().includes(target))
   ) {
-    if (street.toLowerCase().includes(target)) street = "";
-    if (district.toLowerCase().includes(target)) district = "";
-    if (city.toLowerCase().includes(target)) city = "";
+    if (street.toLowerCase().includes(target)) street = street.replace(new RegExp(target, "ig"), "").trim();
+    if (district.toLowerCase().includes(target)) district = district.replace(new RegExp(target, "ig"), "").trim();
+    if (city.toLowerCase().includes(target)) city = city.replace(new RegExp(target, "ig"), "").trim();
   }
 
   // Kết hợp lại
   branch.name = [street, district, city].filter(Boolean).join(" - ");
-
-  if(branch.name === "") {
-    branch.name = branch.address;
-  }
 });
   return branches;
 }
