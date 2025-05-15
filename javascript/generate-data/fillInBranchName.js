@@ -11,7 +11,7 @@ branches.forEach((branch) => {
 
   // Tách tên đường
   let street = address.split(",")[0].trim();
-  street = street.replace(/^\s*\d+(?:[\/\-]?\d*[A-Za-z]?)?\s*/, "");
+  street = street.replace(/^\s*(Số\s*)?\d+(?:[\/\-]?\d*[A-Za-z]?)?\s*/, "");
 
   street = capitalizeFirstLetter(street);
 
