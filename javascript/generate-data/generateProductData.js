@@ -1,6 +1,7 @@
-const branch = "";
+//const branch = "";
+const branch = "Nguyễn Huệ - Q.1";
 const HE_THONG_CHUNG = "";
-const NGUYEN_HUE = "Số 68 Nguyễn Huệ - Q.1";
+const NGUYEN_HUE = "Nguyễn Huệ - Q.1";
 const CA_PHE_MUOI_CHAI = "Cà phê muối chai";
 let salesChannels = [];
 if (branch === NGUYEN_HUE) {
@@ -10,7 +11,7 @@ if (branch === NGUYEN_HUE) {
 }
 
 const volumePricesByBranch = {
-  "Số 68 Nguyễn Huệ - Q.1": {
+  "Nguyễn Huệ - Q.1": {
     330: 20000,
     500: 25000,
     600: 25000,
