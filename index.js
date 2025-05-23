@@ -8,7 +8,8 @@ import { analyseRawInventories } from "./javascript/analyseRawInventories.js";
 import extractUniqueUnits from "./javascript/extractUniqueUnits.js"
 import inventories from "./data/inventories.js";
 import generateUnits from "./javascript/generate-data/generateUnits.js";
-
+import units from "./data/units.js"
+import generateSQLInsertUnit from "./javascript/generate-sql/generateSQLScript_InsertUnits.js"
 // ---------------- Generate SQL Script - Insert Products ----------------
 // const data = generateData(products);
 // const sql = generateSQLInsertProducts(data);
@@ -36,8 +37,12 @@ import generateUnits from "./javascript/generate-data/generateUnits.js";
 // fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
 
 // ---------------- Generate Units ------------------------
-const data = generateUnits();
-fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
+// const data = generateUnits();
+// fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
+
+// ---------------- Generate SQL Script - Insert Units ------------------------
+const data = generateSQLInsertUnit(units);
+fs.writeFileSync("result.txt", data, "utf8");
 
 
 console.log("Data đã được ghi vào file result.txt");

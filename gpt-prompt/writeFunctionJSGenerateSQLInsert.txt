@@ -1,0 +1,12 @@
+Hãy viết cho tôi function javascript generate ra sql
+
+Tên function: 
+
+Yêu cầu của tôi: 
+- Phải kiểm tra table đã tồn tại giá trị đó chưa, nếu chưa thì mới được phép insert
+- Sử dụng công thức substr(md5(random()::text), 1, 24) cho field id
+
+Biết rằng input cho hàm javascript như sau:
+
+
+Biết rằng Table như sau:

@@ -48,3 +48,5 @@ const units = [
     symbol: "bao",
   },
 ];
+
+export default units;
