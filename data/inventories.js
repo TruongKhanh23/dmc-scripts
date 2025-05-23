@@ -49,10 +49,10 @@ const inventories = [
   },
   {
     name: "ĐƯỜNG GÓI",
-    baseUnit: "400 GÓI",
-    unitPrice: 370,
-    packageUnit: "400 GÓI",
-    packageQuantity: 1,
+    baseUnit: "GÓI",
+    unitPrice: 0.93,
+    packageUnit: "KIỆN",
+    packageQuantity: 400,
     packagePrice: 370,
   },
   {
@@ -89,9 +89,9 @@ const inventories = [
   },
   {
     name: "BẮP RANG BƠ",
-    baseUnit: "1 CHAI",
+    baseUnit: "CHAI",
     unitPrice: 55000,
-    packageUnit: "1 CHAI",
+    packageUnit: "CHAI",
     packageQuantity: 1,
     packagePrice: 55000,
   },
@@ -113,10 +113,10 @@ const inventories = [
   },
   {
     name: "LÁ DỨA",
-    baseUnit: "1000 GRAM",
-    unitPrice: 25000,
-    packageUnit: "1000 GRAM",
-    packageQuantity: 1,
+    baseUnit: "GRAM",
+    unitPrice: 25,
+    packageUnit: "KIỆN",
+    packageQuantity: 1000,
     packagePrice: 25000,
   },
   {
@@ -217,18 +217,18 @@ const inventories = [
   },
   {
     name: "SYRUP ĐƯỜNG",
-    baseUnit: ",",
-    unitPrice: 0.96,
+    baseUnit: "GRAM",
+    unitPrice: 0,
     packageUnit: "THÙNG",
-    packageQuantity: 26,
+    packageQuantity: 26000,
     packagePrice: 25,
   },
   {
     name: "ĐÁC THƠM",
-    baseUnit: ",",
-    unitPrice: 170000,
+    baseUnit: "KG",
+    unitPrice: 100000,
     packageUnit: "BỊCH",
-    packageQuantity: 1,
+    packageQuantity: 1.7,
     packagePrice: 170000,
   },
   {
@@ -256,3 +256,5 @@ const inventories = [
     packagePrice: 17000,
   },
 ];
+
+export default inventories;

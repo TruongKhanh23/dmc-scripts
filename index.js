@@ -5,6 +5,8 @@ import generateSQLInsertProducts from "./javascript/generate-sql/generateSQLScri
 import { fillInBranchName } from "./javascript/generate-data/fillInBranchName.js";
 import generateInsertBranches from "./javascript/generate-sql/generateSQLScript_InsertBranches.js";
 import { analyseRawInventories } from "./javascript/analyseRawInventories.js";
+import extractUniqueUnits from "./javascript/extractUniqueUnits.js"
+import inventories from "./data/inventories.js";
 
 // ---------------- Generate SQL Script - Insert Products ----------------
 // const data = generateData(products);
@@ -25,7 +27,12 @@ import { analyseRawInventories } from "./javascript/analyseRawInventories.js";
 // fs.writeFileSync("result.txt", data, "utf8");
 
 // ---------------- Analyse RawInventories ----------------
-const data = analyseRawInventories();
+// const data = analyseRawInventories();
+// fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
+
+// ---------------- Extract unique units ------------------
+const data = extractUniqueUnits(inventories);
 fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
+
 
 console.log("Data đã được ghi vào file result.txt");

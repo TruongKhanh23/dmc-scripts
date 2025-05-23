@@ -1,6 +1,8 @@
 import rawInventories from "../data/inventories_raw.js";
 
 export function analyseRawInventories() {
+  const exceptPackageUnit = ["CHAI"];
+
   return rawInventories.map((item) => {
     const originalName = item.inventoryName;
     const originUnit = item.originUnit;
@@ -20,32 +22,55 @@ export function analyseRawInventories() {
       ? analyseUnit.split("/").map((s) => s.trim())
       : ["", ""];
 
-    // Bước 3: Phân tích beforeSlash
     let packageQuantity = null;
     let baseUnit = "";
-    if (beforeSlash) {
-      const quantityMatch = beforeSlash.match(/[\d.]+/); // hỗ trợ số thập phân
-      const unitMatch = beforeSlash.match(/[^\d.]+/);
+    let packageUnit = "";
+    let unitPrice;
 
-      packageQuantity = quantityMatch ? parseFloat(quantityMatch[0]) : null;
-      baseUnit = unitMatch ? unitMatch[0].trim() : "";
-    } else {
-      baseUnit = originUnit.trim();
+    // Hàm xử lý số có dấu phẩy hoặc chấm
+    function parseQuantity(text) {
+      const quantityMatch = text.match(/[\d,.]+/);
+      const rawQuantity = quantityMatch ? quantityMatch[0] : null;
+      return rawQuantity
+        ? parseFloat(rawQuantity.replace(/\./g, "").replace(",", "."))
+        : null;
     }
 
-    // Bước 4: packageUnit
-    const packageUnit = afterSlash ? afterSlash.trim() : originUnit.trim();
+    if (beforeSlash) {
+      const quantity = parseQuantity(beforeSlash);
+      const unitMatch = beforeSlash.match(/[^\d,.]+/);
 
-    // Bước 5: packagePrice
+      packageQuantity = quantity;
+      baseUnit = unitMatch ? unitMatch[0].trim() : "";
+      packageUnit = afterSlash || originUnit.trim();
+    } else if (!unitInBracketMatch && !originUnit.includes("/")) {
+      // Không có ngoặc và không có dấu /
+      const quantity = parseQuantity(originUnit);
+      const unitMatch = originUnit.match(/[^\d,.]+/);
+
+      if (quantity) {
+        packageQuantity = quantity;
+        baseUnit = unitMatch ? unitMatch[0].trim() : "";
+        packageUnit = exceptPackageUnit.includes(baseUnit) ? baseUnit : "KIỆN";
+      } else {
+        packageQuantity = 1;
+        baseUnit = originUnit.trim();
+        packageUnit = baseUnit;
+      }
+    } else {
+      // Fallback
+      baseUnit = originUnit.trim();
+      packageQuantity = 1;
+      packageUnit = originUnit.trim();
+    }
+
     const packagePrice = originPrice;
 
-    // Bước 6: unitPrice
-    let unitPrice;
     if (packageQuantity && packageUnit) {
       unitPrice = parseFloat((packagePrice / packageQuantity).toFixed(2));
     } else {
       unitPrice = packagePrice;
-      packageQuantity = 1; // ✅ Nếu unitPrice = packagePrice thì packageQuantity = 1
+      packageQuantity = 1;
     }
 
     return {

@@ -79,7 +79,7 @@ const rawInventories = [
     originPrice: 50000,
   },
   {
-    inventoryName: "SYRUP ĐƯỜNG ( 26,000GRAM/ THÙNG)",
+    inventoryName: "SYRUP ĐƯỜNG ( 26000GRAM/ THÙNG)",
     originUnit: "GRAM",
     originPrice: 25,
   },
