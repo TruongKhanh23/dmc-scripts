@@ -1,23 +1,36 @@
 import rawInventories from "../data/inventories_raw.js";
 
+function capitalizeWords(str) {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export function analyseRawInventories() {
   const exceptPackageUnit = ["CHAI"];
+
+  function capitalizeWords(str) {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 
   return rawInventories.map((item) => {
     const originalName = item.inventoryName;
     const originUnit = item.originUnit;
     const originPrice = item.originPrice;
 
-    // Bước 1: Lấy phần trong ngoặc (nếu có), gán vào analyseUnit
     const unitInBracketMatch = originalName.match(/\(([^)]+)\)/);
     const analyseUnit = unitInBracketMatch
       ? unitInBracketMatch[1].trim()
       : originUnit;
 
-    // Loại bỏ phần trong ngoặc khỏi name
     const name = originalName.replace(/\s*\([^)]*\)\s*/g, "").trim();
 
-    // Bước 2: Tách chuỗi bằng dấu /
     let [beforeSlash, afterSlash] = analyseUnit.includes("/")
       ? analyseUnit.split("/").map((s) => s.trim())
       : ["", ""];
@@ -27,7 +40,6 @@ export function analyseRawInventories() {
     let packageUnit = "";
     let unitPrice;
 
-    // Hàm xử lý số có dấu phẩy hoặc chấm
     function parseQuantity(text) {
       const quantityMatch = text.match(/[\d,.]+/);
       const rawQuantity = quantityMatch ? quantityMatch[0] : null;
@@ -41,27 +53,27 @@ export function analyseRawInventories() {
       const unitMatch = beforeSlash.match(/[^\d,.]+/);
 
       packageQuantity = quantity;
-      baseUnit = unitMatch ? unitMatch[0].trim() : "";
-      packageUnit = afterSlash || originUnit.trim();
+      baseUnit = unitMatch ? unitMatch[0].trim().toLowerCase() : "";
+      packageUnit = (afterSlash || originUnit.trim()).toLowerCase();
     } else if (!unitInBracketMatch && !originUnit.includes("/")) {
-      // Không có ngoặc và không có dấu /
       const quantity = parseQuantity(originUnit);
       const unitMatch = originUnit.match(/[^\d,.]+/);
 
       if (quantity) {
         packageQuantity = quantity;
-        baseUnit = unitMatch ? unitMatch[0].trim() : "";
-        packageUnit = exceptPackageUnit.includes(baseUnit) ? baseUnit : "KIỆN";
+        baseUnit = unitMatch ? unitMatch[0].trim().toLowerCase() : "";
+        packageUnit = exceptPackageUnit.includes(baseUnit.toUpperCase())
+          ? baseUnit
+          : "kiện";
       } else {
         packageQuantity = 1;
-        baseUnit = originUnit.trim();
+        baseUnit = originUnit.trim().toLowerCase();
         packageUnit = baseUnit;
       }
     } else {
-      // Fallback
-      baseUnit = originUnit.trim();
+      baseUnit = originUnit.trim().toLowerCase();
       packageQuantity = 1;
-      packageUnit = originUnit.trim();
+      packageUnit = originUnit.trim().toLowerCase();
     }
 
     const packagePrice = originPrice;
@@ -74,7 +86,7 @@ export function analyseRawInventories() {
     }
 
     return {
-      name,
+      name: capitalizeWords(name),
       baseUnit,
       unitPrice,
       packageUnit,

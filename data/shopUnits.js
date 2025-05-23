@@ -1,15 +1,15 @@
 const shopUnits = [
-  "GRAM",
-  "BỊCH",
-  "HỘP",
-  "LON",
-  "HỦ",
-  "GÓI",
-  "KIỆN",
-  "CHAI",
-  "TÚI",
-  "THÙNG",
-  "KG",
-  "BAO"
+  "gram",
+  "bịch",
+  "hộp",
+  "lon",
+  "hủ",
+  "gói",
+  "kiện",
+  "chai",
+  "túi",
+  "thùng",
+  "kg",
+  "bao"
 ]
 export default shopUnits;
