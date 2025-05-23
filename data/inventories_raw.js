@@ -35,7 +35,7 @@ const rawInventories = [
   { inventoryName: "THẢO MỘC", originUnit: "10 TÚI/ GÓI", originPrice: 7000 },
   { inventoryName: "LÁ DỨA", originUnit: "1000 GRAM", originPrice: 25000 },
   {
-    inventoryName: "TRÀ XANH LÀI ( 500G/BỊCH)",
+    inventoryName: "TRÀ XANH LÀI ( 500GRAM/BỊCH)",
     originUnit: "GRAM",
     originPrice: 74000,
   },
@@ -54,12 +54,12 @@ const rawInventories = [
   },
   { inventoryName: "MUỐI ỚT", originUnit: "250 GRAM/ GÓI", originPrice: 15000 },
   {
-    inventoryName: "ÉP THƠM (850ML/CHAI)",
+    inventoryName: "ÉP THƠM (875.5GRAM/CHAI)",
     originUnit: "GRAM",
     originPrice: 130000,
   },
   {
-    inventoryName: "SYRUP ME (CHAI 1,1 LÍT)",
+    inventoryName: "SYRUP ME (1400GRAM/CHAI)",
     originUnit: "GRAM",
     originPrice: 99000,
   },
@@ -74,7 +74,7 @@ const rawInventories = [
     originPrice: 45000,
   },
   {
-    inventoryName: "NƯỚC CỐT TẮC (650ML/CHAI)",
+    inventoryName: "NƯỚC CỐT TẮC (669.5GRAM/CHAI)",
     originUnit: "GRAM",
     originPrice: 50000,
   },
@@ -90,7 +90,7 @@ const rawInventories = [
   },
   { inventoryName: "SỮA CHUA", originUnit: "HỦ", originPrice: 11000 },
   {
-    inventoryName: "NƯỚC CỐT CHANH ( 640ml/CHAI )",
+    inventoryName: "NƯỚC CỐT CHANH ( 659GRAM/CHAI )",
     originUnit: "GRAM",
     originPrice: 50000,
   },

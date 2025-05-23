@@ -7,6 +7,7 @@ import generateInsertBranches from "./javascript/generate-sql/generateSQLScript_
 import { analyseRawInventories } from "./javascript/analyseRawInventories.js";
 import extractUniqueUnits from "./javascript/extractUniqueUnits.js"
 import inventories from "./data/inventories.js";
+import generateUnits from "./javascript/generate-data/generateUnits.js";
 
 // ---------------- Generate SQL Script - Insert Products ----------------
 // const data = generateData(products);
@@ -31,7 +32,11 @@ import inventories from "./data/inventories.js";
 // fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
 
 // ---------------- Extract unique units ------------------
-const data = extractUniqueUnits(inventories);
+// const data = extractUniqueUnits(inventories);
+// fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
+
+// ---------------- Generate Units ------------------------
+const data = generateUnits();
 fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
 
 

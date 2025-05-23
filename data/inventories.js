@@ -121,7 +121,7 @@ const inventories = [
   },
   {
     name: "TRÀ XANH LÀI",
-    baseUnit: "G",
+    baseUnit: "GRAM",
     unitPrice: 148,
     packageUnit: "BỊCH",
     packageQuantity: 500,
@@ -177,18 +177,18 @@ const inventories = [
   },
   {
     name: "ÉP THƠM",
-    baseUnit: "ML",
-    unitPrice: 152.94,
+    baseUnit: "GRAM",
+    unitPrice: 14.85,
     packageUnit: "CHAI",
-    packageQuantity: 850,
+    packageQuantity: 8755,
     packagePrice: 130000,
   },
   {
     name: "SYRUP ME",
     baseUnit: "GRAM",
-    unitPrice: 99000,
-    packageUnit: "GRAM",
-    packageQuantity: 1,
+    unitPrice: 70.71,
+    packageUnit: "CHAI",
+    packageQuantity: 1400,
     packagePrice: 99000,
   },
   {
@@ -209,10 +209,10 @@ const inventories = [
   },
   {
     name: "NƯỚC CỐT TẮC",
-    baseUnit: "ML",
-    unitPrice: 76.92,
+    baseUnit: "GRAM",
+    unitPrice: 7.47,
     packageUnit: "CHAI",
-    packageQuantity: 650,
+    packageQuantity: 6695,
     packagePrice: 50000,
   },
   {
@@ -241,10 +241,10 @@ const inventories = [
   },
   {
     name: "NƯỚC CỐT CHANH",
-    baseUnit: "ml",
-    unitPrice: 78.13,
+    baseUnit: "GRAM",
+    unitPrice: 75.87,
     packageUnit: "CHAI",
-    packageQuantity: 640,
+    packageQuantity: 659,
     packagePrice: 50000,
   },
   {
