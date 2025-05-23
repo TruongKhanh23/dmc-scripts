@@ -10,6 +10,8 @@ import inventories from "./data/inventories.js";
 import generateUnits from "./javascript/generate-data/generateUnits.js";
 import units from "./data/units.js"
 import generateSQLInsertUnit from "./javascript/generate-sql/generateSQLScript_InsertUnits.js"
+import generateSQLInsertInventories from "./javascript/generate-sql/generateSQLSript_InsertInventories.js"
+
 // ---------------- Generate SQL Script - Insert Products ----------------
 // const data = generateData(products);
 // const sql = generateSQLInsertProducts(data);
@@ -41,8 +43,11 @@ import generateSQLInsertUnit from "./javascript/generate-sql/generateSQLScript_I
 // fs.writeFileSync("result.txt", JSON.stringify(data, null, 2), "utf8");
 
 // ---------------- Generate SQL Script - Insert Units ------------------------
-const data = generateSQLInsertUnit(units);
-fs.writeFileSync("result.txt", data, "utf8");
+// const data = generateSQLInsertUnit(units);
+// fs.writeFileSync("result.txt", data, "utf8");
 
+// ---------------- Generate SQL Script - Insert Inventories -------------------
+const data = generateSQLInsertInventories(inventories);
+fs.writeFileSync("result.txt", data, "utf8");
 
 console.log("Data đã được ghi vào file result.txt");
